@@ -11,5 +11,10 @@
   },
   "peerDependencies": {
     "typescript": "^5"
+  },
+  "dependencies": {
+    "@types/express": "^5.0.4",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0"
   }
 }
