@@ -24,10 +24,8 @@ describe("create shop", async()=> {
           createdBy: createdUser.body.user.id
         };
        
-        const response = await request(app)
-          .post("/shop")
-          .set("Authorization", token.token)
-          .send(shop);
+        const response = await request(app).post("/shop").set("Authorization", token.token).send(shop);
+
         expect(response.status).toBe(201);
         expect(response.body).toHaveProperty("message", "Shop created");
         expect(response.body.shop).toMatchObject({
@@ -37,4 +35,54 @@ describe("create shop", async()=> {
           category: "Electronics"
         });
       });
+
+     describe("shop creation failed", async() => {
+      test("Unauthentificated user", async () => {
+        const createdUser = await request(app).post('/users').send( {
+            name: faker.person.fullName(),
+            email: faker.internet.email(),
+            password: 'facteur20032009',
+            role: 'admin' });
+        const loginRes = await request(app).post('/auth/login').send({ email: createdUser.body.user.email,password: 'facteur20032009'});
+    
+        const shop: createShopInput = {
+          name: "Sinergie",
+          description: "test description",
+          address: "Bangui",
+          category: "Electronics", 
+          phone:"74024015000000",
+          isActive: true,
+          createdBy: createdUser.body.user.id
+        };
+        const response = await request(app).post("/shop").send(shop);
+        expect(response.status).toBe(401);
+        expect(response.body).toHaveProperty('error');
+        expect(response.body.error).toEqual("You must authentificate yourself")
+      });
+
+      test("Unauthorized user", async()=> {
+        const createdUser = await request(app).post('/users').send( {
+          name: faker.person.fullName(),
+          email: faker.internet.email(),
+          password: 'facteur20032009',
+          role: 'client' });
+         const loginRes = await request(app).post('/auth/login').send({ email: createdUser.body.user.email, password: 'facteur20032009'});
+         const token = loginRes.body.result;
+        
+         const shop: createShopInput = {
+          name: "Sinergie",
+          description: "test description",
+          address: "Bangui",
+          category: "Electronics", 
+          phone:"74024015000000",
+          isActive: true,
+          createdBy: createdUser.body.user.id
+        };
+        const response = await request(app).post("/shop").set("Authorization", token.token).send(shop);
+        expect(response.status).toBe(403);
+        
+           
+      })
+     })
+     
 })

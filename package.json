@@ -4,8 +4,10 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "bun run --hot src/index"
+    "dev": "bun run --hot src/index",
+    "test:coverage":"bun test --coverage"
   },
+  
   "devDependencies": {
     "@types/bun": "latest"
   },

@@ -1,5 +1,4 @@
-import { length } from "zod";
-import type { createShopInput, Shop , ShopRepository} from "../core/shop.models";
+import type {Shop , ShopRepository} from "../core/shop.models";
 
 
 
@@ -29,13 +28,11 @@ export class InMemory implements ShopRepository {
     }
 
     delete(id: string):Promise<Boolean> {
-        const length = this.db.length;
-        this.db.filter(Shop => Shop.id !== id)
-        if(length >  this.db.length) {
-            return Promise.resolve(true)
-        } else {
-            return Promise.resolve(false)
+        const shopIndex = this.db.findIndex(shop => shop.id === id);
+        if (shopIndex === -1) {
+            return Promise.resolve(false);
         }
-      
+        this.db.splice(shopIndex, 1);
+        return Promise.resolve(true);
     }
 }

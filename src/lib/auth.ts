@@ -22,26 +22,33 @@ export function generateJwt( id: string, email:string, role:string){
 }
 
 
-export function verifyToken(token: string, role: string): JwtPayload {
-      const secret = process.env.JWT_SECRET!;
-	  if(token == null) {
-		throw new MissingTokenError();
-	  };
-
-	  if(token.startsWith('Bearer ')) {
-		token = token.split(" ")[1]!;
+export function verifyToken(token: string, role?: string): JwtPayload {
+	const secret = process.env.JWT_SECRET!;
+	
+	if (!token) {
+	  throw new MissingTokenError();
+	}
+  
+	if (token.startsWith("Bearer ")) {
+	  token = token.split(" ")[1]!;
+	}
+  
+	try {
+	  const decoded = jwt.verify(token, secret);
+	  if (!decoded) {
+		throw new TokenValidationError();
 	  }
-
-	 const decoded = jwt.verify(token, secret)
-     
-	 if(decoded == null) {
-		   throw new TokenValidationError();
-	 }
-
-	 const payload = decoded as JwtPayload;
-	 if(role && payload.role !== role) {
+  
+	  const payload = decoded as JwtPayload;
+  
+	  if (role && payload.role !== role) {
 		throw new TokenAuthorizationError();
-	 }
-
-	 return payload;
-}
+	  }
+  
+	  return payload;
+	} catch (err) {
+	
+	  console.error("JWT verification failed:", err);
+	  throw err; 
+	}
+  }
