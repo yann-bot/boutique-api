@@ -25,9 +25,6 @@ export const createUserSchema = z.object({
 
 export interface UserRepository {
     create: (user:User)=> Promise<User>;
-    //  readAll: () => Promise<User[]>;
     readOne: (email: string) => Promise<User| undefined>;
-  //  update: (id:string) => Promise<User| undefined>
- //  delete: (id: string) => Promise<void>;
 
 }

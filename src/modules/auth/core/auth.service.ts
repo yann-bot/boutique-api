@@ -19,8 +19,7 @@ export class AuthService {
     async login(input: LoginInput):Promise<LoginOutput> {
         const userFound = await this.repo.readOne(input.email);
         if(!userFound){
-            throw new UserNotFoundError(input.email); 
-                          
+            throw new UserNotFoundError(input.email);                   
         }
         const match = await bcrypt.compare(input.password, userFound.password);
         if (!match) {

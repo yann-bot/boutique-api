@@ -1,4 +1,8 @@
 import jwt, { type JwtPayload, type Secret, type SignOptions } from "jsonwebtoken";
+import { MissingTokenError, TokenValidationError, TokenAuthorizationError } from "./errorHandler";
+
+
+
 
 
 export function generateJwt( id: string, email:string, role:string){
@@ -18,10 +22,10 @@ export function generateJwt( id: string, email:string, role:string){
 }
 
 
-export function verifyToken(token: string, role: string): JwtPayload | null {
+export function verifyToken(token: string, role: string): JwtPayload {
       const secret = process.env.JWT_SECRET!;
 	  if(token == null) {
-		return null;
+		throw new MissingTokenError();
 	  };
 
 	  if(token.startsWith('Bearer ')) {
@@ -31,12 +35,12 @@ export function verifyToken(token: string, role: string): JwtPayload | null {
 	 const decoded = jwt.verify(token, secret)
      
 	 if(decoded == null) {
-		return null;
+		   throw new TokenValidationError();
 	 }
 
 	 const payload = decoded as JwtPayload;
 	 if(role && payload.role !== role) {
-		return null;
+		throw new TokenAuthorizationError();
 	 }
 
 	 return payload;

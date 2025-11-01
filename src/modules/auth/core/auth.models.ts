@@ -1,4 +1,3 @@
-import { password } from 'bun';
 import z from 'zod';
 
 
@@ -7,6 +6,7 @@ export type LoginOutput = {
 }
 
 export type  LoginInput = {
+
     email:string,
     password:string,
 }

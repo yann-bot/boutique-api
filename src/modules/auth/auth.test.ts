@@ -3,22 +3,21 @@ import { faker } from "@faker-js/faker";
 import request from "supertest";
 import app from "../../server";
 import type {LoginInput } from "./core/auth.models";
-import { password } from "bun";
 
 
 describe("Authentification ", async()=> {
 
       test('Login success', async()=>{
-          const createdUser = await request(app).post('/users').send( {
-            name: faker.person.fullName(),
-            email: faker.internet.email(),
-            password: 'facteur20032009',
-            role: 'client' });
-          const loginInput: LoginInput = {
-              email: createdUser.body.user.email,
-              password: 'facteur20032009',
-           };
-          const response = await request(app).post('/auth/login').send(loginInput);
+            const createdUser = await request(app).post('/users').send( {
+                  name: faker.person.fullName(),
+                  email: faker.internet.email(),
+                  password: 'facteur20032009',
+                  role: 'client' });
+            const loginInput: LoginInput = {
+                    email: createdUser.body.user.email,
+                    password: 'facteur20032009',
+                 };
+            const response = await request(app).post('/auth/login').send(loginInput);
 
           expect(response.status).toBe(200);
           expect(response.body.message).toEqual('Connected');
