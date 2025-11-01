@@ -3,10 +3,6 @@ import { faker } from "@faker-js/faker";
 import request from "supertest";
 import app from "../../server";
 import { type createShopInput } from "./core/shop.models";
-import type { LoginInput } from "../auth/core/auth.models";
-
-
-
 
 
 describe("create shop", async()=> {
@@ -16,7 +12,6 @@ describe("create shop", async()=> {
             email: faker.internet.email(),
             password: 'facteur20032009',
             role: 'admin' });
-      
         const loginRes = await request(app).post('/auth/login').send({ email: createdUser.body.user.email,password: 'facteur20032009'});
         const token = loginRes.body.result;
         const shop: createShopInput = {
@@ -28,12 +23,11 @@ describe("create shop", async()=> {
           isActive: true,
           createdBy: createdUser.body.user.id
         };
-      
+       
         const response = await request(app)
           .post("/shop")
-          .set("Authorization", token)
+          .set("Authorization", token.token)
           .send(shop);
-      
         expect(response.status).toBe(201);
         expect(response.body).toHaveProperty("message", "Shop created");
         expect(response.body.shop).toMatchObject({

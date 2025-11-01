@@ -10,6 +10,6 @@ app.use(express.json())
 app.use('/home', homeRoutes);
 app.use('/users', userRoutes);
 app.use('/auth', authRoutes);
-app.use('/shops', shopRoutes )
+app.use('/shop', shopRoutes )
 
 export default app;
