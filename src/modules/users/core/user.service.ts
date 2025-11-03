@@ -39,5 +39,29 @@ export class UserService {
         return userFound;
     }
 
-   
+    async updateUser(email: string, data: Partial<User>): Promise<User | undefined> {
+        const userFound = await this.repo.readOne(email);
+        if (!userFound) {
+            return undefined;
+        }
+        const updated: User = {
+            ...userFound,
+            ...data,
+            email: userFound.email,
+        };
+        if (data.password) {
+            updated.password = await bcrypt.hash(data.password, 10);
+        }
+        const result = await this.repo.update(email, updated);
+        return result;
+    }
+
+    async deleteUser(email: string): Promise<boolean> {
+        const userFound = await this.repo.readOne(email);
+        if (!userFound) {
+            return false;
+        }
+        await this.repo.delete(email);
+        return true;
+    }
 }

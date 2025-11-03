@@ -7,6 +7,27 @@ export class UserNotFoundError extends Error {
     }
 }
 
+export class DuplicateUserError extends Error {
+    constructor(email: string) {
+        super(`User with email ${email} already exists`);
+        this.name = "DuplicateUserError";
+    }
+}
+
+export class DuplicateFavoriteError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = "DuplicateFavoriteError";
+    }
+}
+
+export class MissingShopIdError extends Error {
+    constructor() {
+        super("Missing shop id");
+        this.name = "MissingShopIdError";
+    }
+}
+
 export class InvalidPasswordError extends Error {
     constructor() {
         super("Incorrect password");
@@ -16,7 +37,7 @@ export class InvalidPasswordError extends Error {
 
 export class TokenAuthorizationError extends Error {
 	constructor() {
-        super("Acces denied");
+        super("Access denied");
         this.name = "TokenAuthorizationError"
     }
 }
@@ -32,6 +53,27 @@ export class TokenValidationError extends Error {
     constructor() {
         super("Invalid Token");
         this.name = "TokenValidationError";
+    }
+}
+
+export class InvalidFavoriteDataError extends Error {
+    constructor(message = "Invalid favorite data") {
+        super(message);
+        this.name = "InvalidFavoriteDataError";
+    }
+}
+
+export class MissingIdError extends Error {
+    constructor() {
+        super("Missing id");
+        this.name = "MissingIdError";
+    }
+}
+
+export class MissingHeaderAuthorization extends Error {
+    constructor() {
+        super("Missing Authorization header");
+        this.name = "MissingHeaderAuthorization";
     }
 }
 
@@ -59,9 +101,15 @@ export function errorHandler(
     if (err instanceof UserNotFoundError) {
       return res.status(404).json({ message: err.message });
     }
+    if (err instanceof DuplicateUserError) {
+      return res.status(409).json({ message: err.message });
+    }
   
     if (err instanceof InvalidPasswordError) {
       return res.status(401).json({ message: err.message });
+    }
+    if (err instanceof MissingShopIdError) {
+      return res.status(400).json({ message: err.message });
     }
   
     console.error("Erreur non gérée :", err);

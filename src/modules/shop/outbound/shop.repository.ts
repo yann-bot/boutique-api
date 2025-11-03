@@ -23,11 +23,14 @@ export class InMemory implements ShopRepository {
 
     update(id: string, newShop: Shop):Promise<Shop>{
           const shopIndex = this.db.findIndex(shop => shop.id === id)
+          if (shopIndex === -1) {
+              return Promise.reject(new Error("Shop not found"));
+          }
           this.db[shopIndex] = newShop;
           return Promise.resolve(newShop)
     }
 
-    delete(id: string):Promise<Boolean> {
+    delete(id: string):Promise<boolean> {
         const shopIndex = this.db.findIndex(shop => shop.id === id);
         if (shopIndex === -1) {
             return Promise.resolve(false);

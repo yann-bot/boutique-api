@@ -2,7 +2,7 @@ import { describe, expect, test } from "bun:test";
 import { faker } from "@faker-js/faker";
 import request from "supertest";
 import app from "../../server";
-import { createElement } from "react";
+// removed unused import
 
 
 
@@ -26,6 +26,19 @@ describe('Create user', async () => {
 
     })
 
+    test('duplicate email returns 409', async() => {
+        const user = {
+            name: faker.person.fullName(),
+            email: faker.internet.email(),
+            password: faker.internet.password(),
+            role: 'client'
+        };
+        await request(app).post('/users').send(user);
+        const response = await request(app).post('/users').send(user);
+        expect(response.status).toBe(409);
+        expect(response.body).toHaveProperty('message');
+    })
+
     test('invalid data', async() => {
         const response = await request(app).post('/users').send({name: 'A' ,email: "invalid", password: "123"})
         const body = response.body;
@@ -43,6 +56,44 @@ describe('Create user', async () => {
 
 })
 
+describe('Update and delete user', async () => {
+    test('update user successful', async () => {
+        const user = {
+            name: faker.person.fullName(),
+            email: faker.internet.email(),
+            password: faker.internet.password(),
+            role: 'client'
+        };
+        await request(app).post('/users').send(user);
+        const response = await request(app).put(`/users/${user.email}`).send({ name: 'New Name' });
+        expect(response.status).toBe(200);
+        expect(response.body.user.name).toBe('New Name');
+    })
+
+    test('update user not found', async () => {
+        const response = await request(app).put(`/users/absent@example.com`).send({ name: 'Valid Name' });
+        expect(response.status).toBe(404);
+    })
+
+    test('delete user successful', async () => {
+        const user = {
+            name: faker.person.fullName(),
+            email: faker.internet.email(),
+            password: faker.internet.password(),
+            role: 'client'
+        };
+        await request(app).post('/users').send(user);
+        const response = await request(app).delete(`/users/${user.email}`);
+        expect(response.status).toBe(200);
+        expect(response.body).toHaveProperty('message');
+    })
+
+    test('delete user not found', async () => {
+        const response = await request(app).delete(`/users/missing@example.com`);
+        expect(response.status).toBe(404);
+    })
+})
+
 
 describe('Get one user by mail', async() => {
     test('found user', async () => {
@@ -58,8 +109,14 @@ describe('Get one user by mail', async() => {
     const userFound = await request(app).get(`/users/${body.user.email}`)
 
     expect(userFound.status).toBe(200);
-    expect(userFound.body.user.mail).toEqual(body.email);
+    expect(userFound.body.user.email).toEqual(body.user.email);
 
+    })
+
+    test('not found returns 404', async () => {
+        const userFound = await request(app).get(`/users/notfound@example.com`)
+        expect(userFound.status).toBe(404);
+        expect(userFound.body).toHaveProperty('message');
     })
    
 })

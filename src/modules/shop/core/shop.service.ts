@@ -58,7 +58,6 @@ export class ShopService {
       if (!shopFound) {
         return false;
       }
-  
       await this.repo.delete(id);
       return true;
     }

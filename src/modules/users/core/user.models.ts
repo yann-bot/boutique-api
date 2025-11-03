@@ -26,5 +26,12 @@ export const createUserSchema = z.object({
 export interface UserRepository {
     create: (user:User)=> Promise<User>;
     readOne: (email: string) => Promise<User| undefined>;
-
+    update: (email: string, newUser: User) => Promise<User>;
+    delete: (email: string) => Promise<boolean>;
 }
+
+export const updateUserSchema = z.object({
+    name: z.string().min(2).optional(),
+    password: z.string().min(6).optional(),
+    role: z.enum(Object.values(Role) as [string, ...string[]]).optional(),
+});
