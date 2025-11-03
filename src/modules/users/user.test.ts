@@ -1,9 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import { faker } from "@faker-js/faker";
 import request from "supertest";
-import app from "../../server";
-// removed unused import
-
+import app from "@/server";
 
 
 describe('Create user', async () => {

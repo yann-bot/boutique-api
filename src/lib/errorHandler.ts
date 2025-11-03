@@ -111,7 +111,55 @@ export function errorHandler(
     if (err instanceof MissingShopIdError) {
       return res.status(400).json({ message: err.message });
     }
-  
+    
+    if(err instanceof MissingHeaderAuthorization) {
+      return res.status(401).json({ message: err.message });
+    }
+    if(err instanceof DuplicateFavoriteError) {
+      return res.status(409).json({ message: err.message });
+    }
+    if(err instanceof InvalidFavoriteDataError) {
+      return res.status(400).json({ message: err.message });
+    }
+    if(err instanceof MissingIdError) {
+      return res.status(400).json({ message: err.message });
+    }
+    if(err instanceof MissingHeaderAuthorization) {
+      return res.status(401).json({ message: err.message });
+    }
+    if(err instanceof DuplicateFavoriteError) {
+      return res.status(409).json({ message: err.message });
+    }
+    if(err instanceof InvalidFavoriteDataError) {
+      return res.status(400).json({ message: err.message });
+    }
+    if(err instanceof MissingIdError) {
+      return res.status(400).json({ message: err.message });
+    }
+    if(err instanceof MissingHeaderAuthorization) {
+      return res.status(401).json({ message: err.message });
+    }
+    if(err instanceof DuplicateFavoriteError) {
+      return res.status(409).json({ message: err.message });
+    }
+    if(err instanceof InvalidFavoriteDataError) {
+      return res.status(400).json({ message: err.message });
+    }
+    if(err instanceof MissingIdError) {
+      return res.status(400).json({ message: err.message });
+    }
+    if(err instanceof MissingHeaderAuthorization) {
+      return res.status(401).json({ message: err.message });
+    }
+    if(err instanceof DuplicateFavoriteError) {
+      return res.status(409).json({ message: err.message });
+    }
+    if(err instanceof InvalidFavoriteDataError) {
+      return res.status(400).json({ message: err.message });
+    }
+    if(err instanceof MissingIdError) {
+      return res.status(400).json({ message: err.message });
+    } 
     console.error("Erreur non gérée :", err);
     return res.status(500).json({
       message: "Server error",

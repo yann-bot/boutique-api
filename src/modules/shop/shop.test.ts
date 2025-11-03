@@ -4,6 +4,7 @@ import request from "supertest";
 import app from "../../server";
 import { type createShopInput } from "./core/shop.models";
 
+
 describe("Test the shop routes", async()=> {
   describe("create shop", async()=> {
     test("Shop creation successful", async () => {

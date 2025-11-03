@@ -1,15 +1,15 @@
-import type { User } from "@/modules/users/core/user.models";
+
 import z  from "zod";
 
 export type Favorite = {
     id: string
     user_id: string,
     shop_id: string,
-    add_date: string,
+    createdDate: Date,
 }
 
 
-export type createdFavoriteInput = Omit<Favorite, 'id'>
+export type createdFavoriteInput = Omit<Favorite, 'id' | 'createdDate'>
 
 export interface FavoriteRepistory {
     create: (favorite: Favorite) => Promise<Favorite>
@@ -21,5 +21,5 @@ export interface FavoriteRepistory {
 export const createFavoriteSchema = z.object({
     user_id: z.string(),
     shop_id: z.string(),
-    add_date: z.string(),
+  
 })

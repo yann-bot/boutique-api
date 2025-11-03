@@ -35,6 +35,7 @@ export class FavoriteService {
         const newFavorite: Favorite = {
             id: `${input.user_id}-${input.shop_id}`,
             ...input,
+            createdDate: new Date(),
         };
 
         try {

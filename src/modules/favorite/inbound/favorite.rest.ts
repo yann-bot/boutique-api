@@ -1,7 +1,7 @@
 
 import { Router, type Request, type Response, type NextFunction } from "express";
 import { FavoriteService } from "../core/favorite.service";
-import { MissingHeaderAuthorization } from "@/lib/errorHandler";
+import { MissingHeaderAuthorization , MissingIdError} from "@/lib/errorHandler";
 import { verifyToken } from "@/lib/auth";
 import { createFavoriteSchema, type createdFavoriteInput } from "../core/favorite.model";
 
@@ -13,10 +13,9 @@ export function favoriteController(service:FavoriteService):Router {
         const authz = req.headers.authorization;
         if(!authz) {
             throw new MissingHeaderAuthorization();
-        }
+        } 
        
         try {
-            
             verifyToken(authz); 
             const parsed = createFavoriteSchema.safeParse(req.body);
             if(!parsed.success) {
@@ -30,6 +29,16 @@ export function favoriteController(service:FavoriteService):Router {
         }
     })
 
+    router.delete('/:id', async(req:Request, res:Response, _next: NextFunction) => {
+        const id = req.params.id;
+        if(!id) {
+            throw new MissingIdError();
+        }
+        const result = await service.deleteFavorite(id);
+        return res.status(200).json({ message: 'Favorite deleted', result: result });
+    })
+
+  
 
     return router;
 }

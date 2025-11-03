@@ -1,6 +1,6 @@
 
 import type { createUserInput, User, UserRepository } from "./user.models";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 
 export class UserService {
