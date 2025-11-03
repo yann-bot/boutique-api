@@ -14,7 +14,7 @@ describe("Test the shop routes", async()=> {
             password: 'facteur20032009',
             role: 'admin' });
         const loginRes = await request(app).post('/auth/login').send({ email: createdUser.body.user.email,password: 'facteur20032009'});
-        const token = loginRes.body.result;
+        const token = loginRes.body.result.token;
         const shop: createShopInput = {
           name: "Sinergie",
           description: "test description",
@@ -25,7 +25,7 @@ describe("Test the shop routes", async()=> {
           createdBy: createdUser.body.user.id
         };
        
-        const response = await request(app).post("/shop").set("Authorization", token.token).send(shop);
+        const response = await request(app).post("/shop").set("Authorization", token).send(shop);
 
         expect(response.status).toBe(201);
         expect(response.body).toHaveProperty("message", "Shop created");
@@ -68,7 +68,7 @@ describe("Test the shop routes", async()=> {
           password: 'facteur20032009',
           role: 'client' });
          const loginRes = await request(app).post('/auth/login').send({ email: createdUser.body.user.email, password: 'facteur20032009'});
-         const token = loginRes.body.result;
+         const token = loginRes.body.result.token;
         
          const shop: createShopInput = {
           name: "Sinergie",
@@ -79,7 +79,7 @@ describe("Test the shop routes", async()=> {
           isActive: true,
           createdBy: createdUser.body.user.id
         };
-        const response = await request(app).post("/shop").set("Authorization", token.token).send(shop);
+        const response = await request(app).post("/shop").set("Authorization", `Bearer ${token}`).send(shop);
         expect(response.status).toBe(403);
       })
      })
@@ -129,7 +129,7 @@ describe("read one shop", async()=> {
     // On crée la boutique via une requête POST
     const shopRes = await request(app)
       .post("/shop")
-      .set("Authorization", token)
+      .set("Authorization", `Bearer ${token}`)
       .send(shopData);
 
     // Récupérer l'id de la boutique créée pour le test
