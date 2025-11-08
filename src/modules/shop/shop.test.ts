@@ -201,6 +201,7 @@ describe("update shop", async()=> {
       .post("/auth/login")
       .send({ email: userPayload.email, password: userPayload.password });
     const token = loginRes.body.result.token;
+    console.log(token)
     const response = await request(app)
       .put(`/shop/non-existing-id`)
       .set("Authorization", `Bearer ${token}`)

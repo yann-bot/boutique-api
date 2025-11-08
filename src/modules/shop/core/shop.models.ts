@@ -7,10 +7,10 @@ export type Shop = {
   description: string;
   address: string;
   category: string;
-  phone: string;
-  contactEmail?: string;
-  website?: string;
-  images?: string[];
+  phone?: string | null;
+  contactEmail?: string | null ;
+  website?: string | null;
+  images?: string[] | null ;
   createdBy: string;
   publishedAt: Date;
   isActive: boolean;
@@ -32,10 +32,10 @@ export const createShopSchema = z.object({
   description: z.string().min(1),
   address: z.string().min(1),
   category: z.string().min(1),
-  phone: z.string().min(6),
-  contactEmail: z.string().email().optional(),
-  website: z.string().url().optional(),
-  images: z.array(z.string().url()).optional(),
+  phone: z.string().min(6).optional().nullable(),
+  contactEmail: z.string().email().optional().nullable(),
+  website: z.string().url().optional().nullable(),
+  images: z.array(z.string().url()).optional().nullable(),
   createdBy: z.string().min(1),
   isActive: z.boolean(),
 });
