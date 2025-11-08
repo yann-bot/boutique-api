@@ -33,7 +33,7 @@ export const shops = Table("shops", {
     id: text('id').primaryKey(), // id: string
     user_id: text('user_id').notNull().references(() => users.id), // user_id: string,
     shop_id: text('shop_id').notNull().references(() => shops.id), // shop_id: string,
-    createDate: integer('created_at', { mode: 'timestamp' }).notNull().default(sql`(strftime('%s','now')*1000)`) // createdDate: Date,
+    createdDate: integer('created_at', { mode: 'timestamp' }).notNull().default(sql`(strftime('%s','now')*1000)`) // createdDate: Date,
   },
   (table) => ({
     uniqueUserShop: uniqueIndex("unique_user_shop").on(table.user_id, table.shop_id)

@@ -1,8 +1,9 @@
-import { InMemory } from "./outbound/favorite.repository";
+
+import { FavoriteDrizzleRepository } from "./outbound/favorite.drizzle";
 import { FavoriteService } from "./core/favorite.service";
 import { favoriteController } from "./inbound/favorite.rest";
 
-const repository = new InMemory();
+const repository = new FavoriteDrizzleRepository();
 const service = new FavoriteService(repository);
 const controller = favoriteController(service);
 
